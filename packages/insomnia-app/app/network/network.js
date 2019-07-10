@@ -28,6 +28,7 @@ import {
   getAppVersion,
   getTempDir,
   STATUS_CODE_PLUGIN_ERROR,
+  AUTH_RTSOFT,
 } from '../common/constants';
 import {
   delay,
@@ -60,6 +61,8 @@ import { cookiesFromJar, jarFromCookies } from 'insomnia-cookies';
 import { urlMatchesCertHost } from './url-matches-cert-host';
 import aws4 from 'aws4';
 import { buildMultipart } from './multipart';
+import { SIGNATURE_METHOD_HMAC_SHA256 } from './o-auth-1/constants';
+import stringifyStable from '../utils/general';
 
 export type ResponsePatch = {|
   statusMessage?: string,
@@ -572,6 +575,29 @@ export async function _actuallySend(
           setOpt(Curl.option.HTTPAUTH, Curl.auth.NTLM);
           setOpt(Curl.option.USERNAME, username || '');
           setOpt(Curl.option.PASSWORD, password || '');
+        } else if (renderedRequest.authentication.type === AUTH_RTSOFT) {
+          const timestamp = Math.round(+new Date() / 1000);
+          const signatureObject = {
+            uri: renderedRequest.url.replace(/.*\/\/[^/]*/, ''),
+            method: renderedRequest.method,
+            timestamp: timestamp,
+            postBody: requestBody,
+          };
+          const signature = crypto
+            .createHmac('SHA256', renderedRequest.authentication.signingKey)
+            .update(stringifyStable(signatureObject), 'utf8')
+            .digest('base64');
+          headers.push({
+            name: 'Authorization',
+            value:
+              SIGNATURE_METHOD_HMAC_SHA256 +
+              ' Credential=' +
+              renderedRequest.authentication.accessKey +
+              '/' +
+              timestamp +
+              ', Signature=' +
+              signature,
+          });
         } else if (renderedRequest.authentication.type === AUTH_AWS_IAM) {
           if (!noBody && !requestBody) {
             return handleError(
@@ -648,6 +674,7 @@ export async function _actuallySend(
             return `${h.name}: ${value}`;
           }
         });
+
       setOpt(Curl.option.HTTPHEADER, headerStrings);
 
       let responseBodyBytes = 0;

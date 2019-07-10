@@ -250,7 +250,8 @@ class WorkspaceDropdown extends React.PureComponent<Props, State> {
                 )}
                 <i className="fa fa-caret-down space-left" />
               </div>
-              {activeWorkspace.name}
+              {/* {activeWorkspace.name} */}
+              {'RTsomnia'}
             </h1>
           </DropdownButton>
           <DropdownDivider>{activeWorkspace.name}</DropdownDivider>

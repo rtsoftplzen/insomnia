@@ -20,6 +20,7 @@ import {
   AUTH_NETRC,
   AUTH_ASAP,
   getAuthTypeName,
+  AUTH_RTSOFT,
 } from '../../../common/constants';
 
 type Props = {
@@ -96,6 +97,7 @@ class AuthDropdown extends React.PureComponent<Props> {
         {this.renderAuthType(AUTH_HAWK)}
         {this.renderAuthType(AUTH_ASAP)}
         {this.renderAuthType(AUTH_NETRC)}
+        {this.renderAuthType(AUTH_RTSOFT)}
         <DropdownDivider>Other</DropdownDivider>
         {this.renderAuthType(AUTH_NONE, 'No Authentication')}
       </Dropdown>

@@ -12,6 +12,7 @@ import {
   AUTH_HAWK,
   AUTH_NETRC,
   AUTH_ASAP,
+  AUTH_RTSOFT,
 } from '../../../../common/constants';
 import BasicAuth from './basic-auth';
 import DigestAuth from './digest-auth';
@@ -21,6 +22,7 @@ import OAuth2Auth from './o-auth-2-auth';
 import OAuth1Auth from './o-auth-1-auth';
 import HawkAuth from './hawk-auth';
 import AWSAuth from './aws-auth';
+import RTsoftAuth from './rtsoft-auth';
 import NetrcAuth from './netrc-auth';
 import AsapAuth from './asap-auth';
 import autobind from 'autobind-decorator';
@@ -149,6 +151,19 @@ class AuthWrapper extends React.PureComponent<Props> {
     } else if (authentication.type === AUTH_AWS_IAM) {
       return (
         <AWSAuth
+          request={request}
+          handleRender={handleRender}
+          handleGetRenderContext={handleGetRenderContext}
+          handleUpdateSettingsShowPasswords={handleUpdateSettingsShowPasswords}
+          nunjucksPowerUserMode={nunjucksPowerUserMode}
+          onChange={onChange}
+          showPasswords={showPasswords}
+          isVariableUncovered={isVariableUncovered}
+        />
+      );
+    } else if (authentication.type === AUTH_RTSOFT) {
+      return (
+        <RTsoftAuth
           request={request}
           handleRender={handleRender}
           handleGetRenderContext={handleGetRenderContext}

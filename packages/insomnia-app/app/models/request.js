@@ -21,6 +21,7 @@ import {
   HAWK_ALGORITHM_SHA256,
   METHOD_GET,
   METHOD_POST,
+  AUTH_RTSOFT,
 } from '../common/constants';
 import * as db from '../common/database';
 import { getContentTypeHeader } from '../common/misc';
@@ -159,6 +160,13 @@ export function newAuth(type: string, oldAuth: RequestAuthentication = {}): Requ
         accessKeyId: oldAuth.accessKeyId || '',
         secretAccessKey: oldAuth.secretAccessKey || '',
         sessionToken: oldAuth.sessionToken || '',
+      };
+
+    // RTSOFT
+    case AUTH_RTSOFT:
+      return {
+        type,
+        signatureMethod: SIGNATURE_METHOD_HMAC_SHA1,
       };
 
     // Hawk

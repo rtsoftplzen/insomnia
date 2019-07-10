@@ -167,6 +167,7 @@ export const AUTH_HAWK = 'hawk';
 export const AUTH_AWS_IAM = 'iam';
 export const AUTH_NETRC = 'netrc';
 export const AUTH_ASAP = 'asap';
+export const AUTH_RTSOFT = 'rtsoft';
 
 export const HAWK_ALGORITHM_SHA256 = 'sha256';
 export const HAWK_ALGORITHM_SHA1 = 'sha1';
@@ -182,6 +183,7 @@ const authTypesMap = {
   [AUTH_AWS_IAM]: ['AWS', 'AWS IAM v4'],
   [AUTH_ASAP]: ['ASAP', 'Atlassian ASAP'],
   [AUTH_NETRC]: ['Netrc', 'Netrc File'],
+  [AUTH_RTSOFT]: ['RTsoft', 'RTsoft'],
 };
 
 export function getPreviewModeName(previewMode, useLong = false) {
